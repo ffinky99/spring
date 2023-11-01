@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;_springProject/src/main/webapp/WEB-INF/views/member/cheakpwd.jsp&apos; to &apos;modipwd.jsp&apos;" description="Rename resource &apos;cheakpwd.jsp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/webapp/WEB-INF/views/member/cheakpwd.jsp" name="modipwd.jsp" stamp="1698737602565" updateReferences="true"/>
-</session>

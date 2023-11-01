@@ -1,9 +1,0 @@
-package com.myweb.www.service;
-
-import Security.MemberVO;
-
-public interface MemberService {
-
-	int register(MemberVO mvo);
-
-}
