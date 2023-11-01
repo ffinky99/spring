@@ -1,0 +1,6 @@
+package Security;
+
+public class AuthVO {
+	private String email;
+	private String auth;
+}

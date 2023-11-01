@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myweb.www.repository.BoardDAO">
+	<insert id="insert"
+		parameterType="com.myweb.www.domain.BoardVO">
+		insert into board(writer, title, content)
+		values (#{writer},#{title},#{content})
+	</insert>
+	<select id="getlist" resultType="com.myweb.www.domain.BoardVO">
+		select * from board
+		<include refid="search"></include>
+		order by bno desc limit #{pageStart}, #{qty}
+	</select>
+
+	<select id="getdatil" parameterType="int"
+		resultType="com.myweb.www.domain.BoardVO">
+		select * from board where bno = #{bno}
+	</select>
+	<update id="modify" parameterType="com.myweb.www.domain.BoardVO">
+		update board set title =
+		#{title} , content= #{content} where bno =#{bno}
+	</update>
+	<delete id="delete" parameterType="int">
+		DELETE FROM board WHERE bno
+		=#{bno}
+	</delete>
+	<select id="getTotalCount" resultType="int">
+		select count(bno) from board
+		<include refid="search"></include>
+	</select>
+	<select id="selectOneBno" resultType="long">
+		select max(bno) from board
+	</select>
+	<update id="updateCmtQty">
+		update board set cmt_qty =(select count(bno) from comment where bno = board.bno) 
+	</update>
+	<update id="updatehasFile">
+		update board set has_file =(select count(uuid) from comment where bno = board.bno) 
+	</update>
+	<update id="updateCmtQty">
+		update board set cmt_qty = #{cmtQty} where bno = #{bno}
+	</update>
+	<sql id="search">
+		<if test="type != null">
+			<trim prefix="where (" suffix=")" prefixOverrides="OR">
+				<foreach collection="typeToArray" item="type">
+					<trim prefix="OR">
+						<choose>
+							<when test="type == 't'.toString()">
+								title like concat('%', #{keyword}, '%')
+							</when>
+							<when test="type == 'w'.toString()">
+								writer like concat('%', #{keyword}, '%')
+							</when>
+							<when test="type == 'c'.toString()">
+								content like concat('%', #{keyword}, '%')
+							</when>
+						</choose>
+					</trim>
+				</foreach>
+			</trim>
+		</if>
+	</sql>
+</mapper>

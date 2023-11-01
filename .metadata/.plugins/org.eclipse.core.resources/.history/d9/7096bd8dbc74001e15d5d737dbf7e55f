@@ -1,0 +1,9 @@
+package com.myweb.www.repository;
+
+import Security.MemberVO;
+
+public interface MemberDAO {
+
+	int register(MemberVO mvo);
+
+}

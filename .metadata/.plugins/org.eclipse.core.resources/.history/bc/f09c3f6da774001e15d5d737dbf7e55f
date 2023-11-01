@@ -1,0 +1,17 @@
+package Security;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+public class CustomAuthMemberService implements UserDetailsService {
+
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// username DB에 설정 되어있는 email인지 체크해서
+		// 인증하여 
+		return null;
+	}
+
+}

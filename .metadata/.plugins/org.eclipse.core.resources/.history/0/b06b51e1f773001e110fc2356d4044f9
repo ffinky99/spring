@@ -1,0 +1,109 @@
+package com.myweb.www.service;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.myweb.www.domain.BoardDTO;
+import com.myweb.www.domain.BoardVO;
+import com.myweb.www.domain.FileVO;
+import com.myweb.www.domain.PagingVO;
+import com.myweb.www.repository.BoardDAO;
+import com.myweb.www.repository.FileDAO;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class BoardServiceImpl implements BoardService{
+	@Inject
+	private BoardDAO bdao;
+	@Inject
+	private FileDAO fdao;
+	@Override
+	public int register(BoardVO bvo) {
+		// TODO Auto-generated method stub
+		return bdao.register(bvo);
+	}
+
+	@Override
+	public BoardDTO getdetail(int bno) {
+//	select * from board where bno = bno
+		BoardDTO bdto = new BoardDTO();
+		bdto.setBvo(bdao.getdatil(bno));
+		bdto.setFlist(fdao.getflist(bno));
+//	select * from file where bno = bno
+		return bdto ;
+	}
+
+	@Override
+	public int modify(BoardVO bvo) {
+		// TODO Auto-generated method stub
+		return bdao.modify(bvo);
+	}
+
+	@Override
+	public void delete(int bno) {
+		bdao.delete(bno);
+		
+	}
+
+	@Override
+	@Transactional
+	public List<BoardVO> getlist(PagingVO pgvo) {
+		bdao.updateCmtQty();
+		bdao.updatehasFile();
+		
+		return bdao.getlist(pgvo);
+		
+	}
+
+	@Override
+	public int getTotalCount(PagingVO pgvo) {
+		// TODO Auto-generated method stub
+		return bdao.getTotalCount(pgvo);
+	}
+
+	@Override
+	public int insert(BoardDTO boardDTO) {
+		//bvo, flist 가져와서 각자 db에 저장
+		
+		int isUp = bdao.insert(boardDTO.getBvo());
+		if(boardDTO.getFlist()==null) {
+			isUp *= 1;
+			return isUp;
+		}
+		
+		if(isUp >0 && boardDTO.getFlist().size()>0 ) {
+			long bno =  bdao.selectOneBno();
+			//모든 파일에 bno를 세팅
+			for(FileVO fvo : boardDTO.getFlist()) {
+				fvo.setBno(bno);
+				isUp *= fdao.insert(fvo);
+			}
+		}
+		return isUp;
+	}
+
+	@Override
+	public int deletefile(String uuid) {
+ 	
+		return fdao.deletefile(uuid);
+	}
+
+	@Override
+	public int insertfile(BoardDTO boardDTO) {
+		int isUp = 0;
+		for(FileVO fvo : boardDTO.getFlist()) {
+			fvo.setBno(boardDTO.getBvo().getBno());
+			isUp = fdao.insert(fvo);
+		}
+		return isUp;
+	}
+
+	
+}

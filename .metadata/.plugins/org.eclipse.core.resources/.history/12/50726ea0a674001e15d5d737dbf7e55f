@@ -1,0 +1,28 @@
+package Security;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class MemberVO {
+
+	private String email;
+	private String pwd;
+	private String nickName;
+	private String regAt;
+	private String lastLogin;
+	
+}
+
+//create table member(
+//email varchar(100) not null,
+//pwd varchar(1000) not null,
+//nick_name varchar(100) not null,
+//reg_at datetime default now(),
+//last_login datetime default null,
+//primary key(email));
